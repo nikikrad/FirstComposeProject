@@ -18,59 +18,59 @@ import com.example.firstcomposeproject.navigation.BottomNavGraph
 
 @Composable
 fun MainScreen() {
-    val navController = rememberNavController()
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        bottomBar = { BottomBar(navController = navController) }
-    ) {
-        BottomNavGraph(navController = navController)
-    }
+//    val navController = rememberNavController()
+//    Scaffold(
+//        modifier = Modifier.fillMaxSize(),
+//        bottomBar = { BottomBar(navController = navController) }
+//    ) {
+//        BottomNavGraph(navController = navController)
+//    }
 }
-
-@Composable
-fun BottomBar(navController: NavHostController) {
-    val screens = listOf(
-        BottomBarScreen.Home,
-        BottomBarScreen.Search,
-        BottomBarScreen.Favorite,
-        BottomBarScreen.Setting
-    )
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-
-    BottomNavigation {
-        screens.forEach { screen ->
-            if (currentDestination != null) {
-                AddItem(screen = screen, currentDestination = currentDestination, navController = navController)
-            }
-        }
-    }
-}
-
-@Composable
-fun RowScope.AddItem(
-    screen: BottomBarScreen,
-    currentDestination: NavDestination,
-    navController: NavHostController
-) {
-    BottomNavigationItem(
-        label = {
-            Text(text = screen.title)
-        },
-        icon = {
-            Icon(
-                imageVector = screen.icon,
-                contentDescription = "Navigation Icon"
-            )
-        },
-        selected = currentDestination.hierarchy.any {
-            it.route == screen.route
-        },
-        unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
-        onClick = {
-            navController.navigate(screen.route){
-                popUpTo(navController.graph.findStartDestination().id)
-                launchSingleTop = true
-            }
-        })
-}
+//
+//@Composable
+//fun BottomBar(navController: NavHostController) {
+//    val screens = listOf(
+//        BottomBarScreen.Home,
+//        BottomBarScreen.Search,
+//        BottomBarScreen.Favorite,
+//        BottomBarScreen.Setting
+//    )
+//    val navBackStackEntry by navController.currentBackStackEntryAsState()
+//    val currentDestination = navBackStackEntry?.destination
+//
+//    BottomNavigation {
+//        screens.forEach { screen ->
+//            if (currentDestination != null) {
+//                AddItem(screen = screen, currentDestination = currentDestination, navController = navController)
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun RowScope.AddItem(
+//    screen: BottomBarScreen,
+//    currentDestination: NavDestination,
+//    navController: NavHostController
+//) {
+//    BottomNavigationItem(
+//        label = {
+//            Text(text = screen.title)
+//        },
+//        icon = {
+//            Icon(
+//                imageVector = screen.icon,
+//                contentDescription = "Navigation Icon"
+//            )
+//        },
+//        selected = currentDestination.hierarchy.any {
+//            it.route == screen.route
+//        },
+//        unselectedContentColor = LocalContentColor.current.copy(alpha = ContentAlpha.disabled),
+//        onClick = {
+//            navController.navigate(screen.route){
+//                popUpTo(navController.graph.findStartDestination().id)
+//                launchSingleTop = true
+//            }
+//        })
+//}

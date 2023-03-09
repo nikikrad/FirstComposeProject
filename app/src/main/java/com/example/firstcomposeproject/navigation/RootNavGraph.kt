@@ -10,22 +10,24 @@ import com.example.firstcomposeproject.ui.search.SearchScreen
 import com.example.firstcomposeproject.ui.settings.SettingScreen
 
 @Composable
-fun BottomNavGraph(navController: NavHostController) {
+fun RootNavGraph (navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = BottomBarScreen.Home.route
+        route = Graph.ROOT,
+        startDestination = Graph.HOME
     ) {
-        composable(route = BottomBarScreen.Home.route) {
-            HomeScreen(navController)
-        }
-        composable(route = BottomBarScreen.Search.route) {
-            SearchScreen()
-        }
-        composable(route = BottomBarScreen.Favorite.route) {
-            FavoriteScreen()
-        }
-        composable(route = BottomBarScreen.Setting.route) {
-            SettingScreen()
+        composable(route = Graph.HOME) {
+            HomeScreen()
         }
     }
+}
+
+object Graph {
+    const val ROOT = "root_graph"
+    const val HOME = "home_graph"
+    const val SEARCH = "search_graph"
+    const val FAVORITE = "favorite_graph"
+    const val SETTING = "setting_graph"
+    const val DETAIL = "detail_graph"
+
 }

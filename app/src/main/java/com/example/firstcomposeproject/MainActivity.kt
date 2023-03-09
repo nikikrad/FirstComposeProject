@@ -18,9 +18,11 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.firstcomposeproject.domain.ApiService
 import com.example.firstcomposeproject.domain.retrofit.RetrofitInstance
+import com.example.firstcomposeproject.navigation.RootNavGraph
 import com.example.firstcomposeproject.ui.home.HomeScreen
 import com.example.firstcomposeproject.ui.main.MainScreen
 import com.example.firstcomposeproject.ui.theme.FirstComposeProjectTheme
@@ -37,7 +39,7 @@ class MainActivity : ComponentActivity() {
             BottomNavigation(
                 modifier = Modifier.fillMaxSize()
             ) {
-                MainScreen()
+                RootNavGraph(navController = rememberNavController())
             }
         }
     }
