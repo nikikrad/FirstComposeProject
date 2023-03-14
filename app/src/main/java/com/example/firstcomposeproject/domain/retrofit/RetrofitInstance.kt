@@ -12,16 +12,9 @@ internal class RetrofitInstance {
         private const val URL = "https://kitsu.io/api/edge/"
 
         fun getRetrofitInstance(): Retrofit {
-            val okHttpClient = OkHttpClient()
-                .newBuilder()
-                .followRedirects(true)
-                .build()
-
             return Retrofit.Builder()
                 .baseUrl(URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .client(okHttpClient)
                 .build()
         }
     }

@@ -8,7 +8,7 @@ import retrofit2.http.Query
 interface ApiService {
 
     @GET("anime?page[limit]=20")
-    fun getAnime(
+    suspend fun getAnime(
         @Query("page[offset]") page: Int
     ): Response<AnimeResponse>
 }
