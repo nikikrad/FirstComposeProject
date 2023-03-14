@@ -1,12 +1,9 @@
-package com.example.firstcomposeproject.navigation.home
+package com.example.firstcomposeproject.navigation.search
 
-import androidx.compose.material.ContentAlpha
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
 import com.example.firstcomposeproject.navigation.BottomBarScreen
 import com.example.firstcomposeproject.navigation.Graph
 import com.example.firstcomposeproject.ui.favorite.FavoriteScreen
@@ -15,20 +12,21 @@ import com.example.firstcomposeproject.ui.home.detail.AnimeDetailScreen
 import com.example.firstcomposeproject.ui.search.SearchScreen
 import com.example.firstcomposeproject.ui.settings.SettingScreen
 
-
-fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
-    navigation(
-        route = Graph.HOME,
-        startDestination = BottomBarScreen.Home.route
+@Composable
+fun SearchNavGraph(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        route = Graph.SEARCH,
+        startDestination = BottomBarScreen.Search.route
     ) {
         composable(route = BottomBarScreen.Home.route) {
             HomeScreen()
         }
         composable(route = BottomBarScreen.Search.route) {
-           SearchScreen()
+            SearchScreen()
         }
         composable(route = BottomBarScreen.Favorite.route) {
-           FavoriteScreen()
+            FavoriteScreen()
         }
         composable(route = BottomBarScreen.Setting.route) {
             SettingScreen()
@@ -36,5 +34,3 @@ fun NavGraphBuilder.homeNavGraph(navController: NavHostController) {
         composable(Graph.DETAIL) { AnimeDetailScreen() }
     }
 }
-
-
