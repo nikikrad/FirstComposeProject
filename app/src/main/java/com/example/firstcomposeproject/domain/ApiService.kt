@@ -13,7 +13,7 @@ interface ApiService {
     ): Response<AnimeResponse>
 
     @GET("anime")
-    fun getAnimeById(
+    suspend fun getAnimeById(
         @Query("filter[id]") idAnime: Int
     ): Response<AnimeResponse>
 }

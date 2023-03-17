@@ -25,19 +25,26 @@ import com.example.firstcomposeproject.navigation.Graph
 import com.example.firstcomposeproject.navigation.NavGraph
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import okhttp3.internal.wait
 import kotlin.random.Random
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun HomeScreen(navController: NavHostController) {
-    val anime = remember {
+    var anime by remember {
         mutableStateOf(AnimeResponse(emptyList()))
     }
-    LaunchedEffect(Unit) {
+    var isLoading by remember{
+        mutableStateOf(true)
+    }
+    LaunchedEffect(key1 = true) {
         getAnime()?.let {
-            anime.value = (it)
+            anime = (it)
         }
+        delay(5000)
+        isLoading = false
     }
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Fixed(2),
@@ -46,18 +53,26 @@ fun HomeScreen(navController: NavHostController) {
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        items(anime.value.data) { item ->
-            Card(modifier = Modifier
-                .clip(shape = RoundedCornerShape(20.dp)),
-                onClick = {
-                    navController.navigate("detail/${item.id}")
-                }
-            ) {
-                AsyncImage(
-                    model = item.attributes.posterImage.large,
-                    contentDescription = item.attributes.titles.en_jp
-                )
-            }
+        items(anime.data) { item ->
+            ShimmerListItem(
+                isLoading = isLoading,
+                contentAfterLoading = {
+                    Card(modifier = Modifier
+                        .clip(shape = RoundedCornerShape(20.dp)),
+                        onClick = {
+                            navController.navigate("detail/${item.id}")
+                        }
+                    ) {
+                        AsyncImage(
+                            model = item.attributes.posterImage.large,
+                            contentDescription = item.attributes.titles.en_jp
+                        )
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
         }
     }
 }
