@@ -27,17 +27,20 @@ fun ShimmerListItem(
     modifier: Modifier = Modifier
 ) {
 
-    if (isLoading){
-        Row(modifier = modifier){
-            Card(modifier = Modifier
-                .size(200.dp)
+    if (isLoading) {
+        Card(
+            modifier = modifier
+                .size(250.dp)
                 .clip(shape = RoundedCornerShape(20.dp))
                 .shimmerEffect(),
-            ) {
-                Box(modifier = Modifier.height(200.dp).width(200.dp))
-            }
+        ) {
+            Box(modifier = modifier
+                .height(250.dp)
+                .width(300.dp))
+
         }
-    }else{
+
+    } else {
         contentAfterLoading()
     }
 }
@@ -57,9 +60,9 @@ fun Modifier.shimmerEffect(): Modifier = composed {
     background(
         brush = Brush.linearGradient(
             colors = listOf(
-                Color(0xFFCECBCB),
+                Color(0xFF000000),
                 Color(0xFF838282),
-                Color(0xFFCECBCB),
+                Color(0xFF000000),
             ),
             start = Offset(startOffsetX, 0f),
             end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())

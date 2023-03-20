@@ -19,10 +19,10 @@ fun NavGraph(
             HomeScreen(navController)
         }
         composable(Graph.SEARCH){
-            SearchScreen()
+            SearchScreen(navController)
         }
         composable(Graph.FAVORITE){
-            FavoriteScreen()
+            FavoriteScreen(navController)
         }
         composable(Graph.SETTING){
             SettingScreen()

@@ -1,5 +1,6 @@
 package com.example.firstcomposeproject.navigation
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.material.BottomNavigation
@@ -22,6 +23,7 @@ import com.example.firstcomposeproject.ui.home.HomeScreen
 import com.example.firstcomposeproject.ui.search.SearchScreen
 import com.example.firstcomposeproject.ui.settings.SettingScreen
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun BottomNavGraph(navController: NavHostController) {
     val listItems = listOf(
@@ -37,8 +39,7 @@ fun BottomNavGraph(navController: NavHostController) {
 //        visible = isVisible.value
 //    ) {
         BottomNavigation(
-            backgroundColor = Color.Cyan,
-            modifier = Modifier.background(Color.Yellow)
+            backgroundColor = Color.DarkGray,
         ) {
             val backStackEntry by navController.currentBackStackEntryAsState()
             val currentRoute = backStackEntry?.destination?.route
@@ -63,8 +64,8 @@ fun BottomNavGraph(navController: NavHostController) {
                             fontSize = 9.sp
                         )
                     },
-                    selectedContentColor = Color.Black,
-                    unselectedContentColor = Color.DarkGray
+                    selectedContentColor = Color.White,
+                    unselectedContentColor = Color.Black
                 )
             }
         }
