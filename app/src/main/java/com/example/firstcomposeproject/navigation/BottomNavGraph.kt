@@ -23,6 +23,7 @@ import com.example.firstcomposeproject.ui.home.HomeScreen
 import com.example.firstcomposeproject.ui.search.SearchScreen
 import com.example.firstcomposeproject.ui.settings.SettingScreen
 
+var visibility = true
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun BottomNavGraph(navController: NavHostController) {
@@ -32,12 +33,12 @@ fun BottomNavGraph(navController: NavHostController) {
         BottomBarScreen.Favorite,
         BottomBarScreen.Setting
     )
-//    var isVisible = remember {
-//        mutableStateOf(true)
-//    }
-//    AnimatedVisibility(
-//        visible = isVisible.value
-//    ) {
+    val isVisible = remember {
+        mutableStateOf(visibility)
+    }
+    AnimatedVisibility(
+        visible = isVisible.value
+    ) {
         BottomNavigation(
             backgroundColor = Color.DarkGray,
         ) {
@@ -48,7 +49,7 @@ fun BottomNavGraph(navController: NavHostController) {
 
             listItems.forEach {
                 BottomNavigationItem(
-                    selected = currentRoute == it.route,
+                    selected = checkCurrentRoute(currentRoute, it.route),
                     onClick = {
                         navController.navigate(it.route)
                     },
@@ -69,5 +70,10 @@ fun BottomNavGraph(navController: NavHostController) {
                 )
             }
         }
-//    }
+    }
+}
+
+fun checkCurrentRoute(currentRoute: String?, route: String): Boolean {
+    visibility = currentRoute == route
+    return currentRoute == route
 }

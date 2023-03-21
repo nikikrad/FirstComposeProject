@@ -16,6 +16,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -28,18 +29,14 @@ fun ShimmerListItem(
 ) {
 
     if (isLoading) {
-        Card(
-            modifier = modifier
-                .size(250.dp)
-                .clip(shape = RoundedCornerShape(20.dp))
-                .shimmerEffect(),
-        ) {
-            Box(modifier = modifier
-                .height(250.dp)
-                .width(300.dp))
 
+        Row( modifier = modifier
+            .size(300.dp)
+            .shimmerEffect(),) {
+            Box(
+                modifier = Modifier.fillMaxSize()
+            )
         }
-
     } else {
         contentAfterLoading()
     }

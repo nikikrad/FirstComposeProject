@@ -16,4 +16,9 @@ interface ApiService {
     suspend fun getAnimeById(
         @Query("filter[id]") idAnime: Int
     ): Response<AnimeResponse>
+
+    @GET("anime")
+    suspend fun getAnimeByName(
+        @Query("filter[text]") nameAnime: String
+    ): Response<AnimeResponse>
 }
