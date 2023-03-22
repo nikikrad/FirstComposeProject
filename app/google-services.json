@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "836777845532",
+    "project_id": "firstcomposeproject",
+    "storage_bucket": "firstcomposeproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836777845532:android:4c6c1e2984a710d773d0d9",
+        "android_client_info": {
+          "package_name": "com.example.firstcomposeproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "836777845532-hdhecjinnbq3jk64ghfo2ojg6pf3ceuj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBioEx1Gc6-0nhGlVh8oEuZZThkyWjjlyQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "836777845532-hdhecjinnbq3jk64ghfo2ojg6pf3ceuj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
