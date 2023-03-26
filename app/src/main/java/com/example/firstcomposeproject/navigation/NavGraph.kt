@@ -10,6 +10,8 @@ import com.example.firstcomposeproject.ui.home.detail.AnimeDetailScreen
 import com.example.firstcomposeproject.ui.search.SearchScreen
 import com.example.firstcomposeproject.ui.settings.SettingScreen
 import com.example.firstcomposeproject.ui.settings.auth.AuthScreen
+import com.example.firstcomposeproject.ui.settings.auth.RegistrationScreen
+import com.example.firstcomposeproject.ui.settings.profile.ProfileScreen
 
 @Composable
 fun NavGraph(
@@ -31,8 +33,14 @@ fun NavGraph(
         composable("detail/{ID}"){
             AnimeDetailScreen(navController , it.arguments?.getString("ID"))
         }
+        composable(Graph.PROFILE){
+            ProfileScreen()
+        }
         composable(Graph.AUTH){
-            AuthScreen()
+            AuthScreen(navController)
+        }
+        composable(Graph.REGISTRATION){
+            RegistrationScreen()
         }
     }
 }
@@ -44,7 +52,9 @@ object Graph {
     const val SEARCH = "search"
     const val FAVORITE = "favorite"
     const val SETTING = "setting"
+    const val PROFILE = "profile"
     const val AUTH = "auth"
+    const val REGISTRATION = "registration"
     const val DETAIL = "detail"
 
 }

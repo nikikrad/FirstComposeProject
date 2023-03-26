@@ -3,9 +3,7 @@ package com.example.firstcomposeproject.ui.settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
@@ -17,6 +15,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.firstcomposeproject.navigation.Graph
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun SettingScreen(navController: NavHostController) {
@@ -27,8 +26,8 @@ fun SettingScreen(navController: NavHostController) {
             .padding(start = 2.dp, end = 2.dp),
         verticalArrangement = Arrangement.spacedBy(5.dp),
 
-    ) {
-        SettingButton("Authentication", navController)
+        ) {
+        SettingButton("Profile", navController)
         SettingButton("Themes", navController)
         SettingButton("Language", navController)
     }
@@ -45,8 +44,9 @@ fun SettingButton(name: String, navController: NavHostController) {
     ) {
         Button(
             onClick = {
-                when(name){
-                    "Authentication" -> navController.navigate(Graph.AUTH)
+                when (name) {
+                    "Profile" -> if (checkLoggedInState()) navController.navigate(Graph.PROFILE)
+                    else navController.navigate(Graph.AUTH)
                 }
             },
             modifier = Modifier
@@ -63,7 +63,7 @@ fun SettingButton(name: String, navController: NavHostController) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 var icon: ImageVector = Icons.Default.Done
-                when(name){
+                when (name) {
                     "Authentication" -> icon = Icons.Default.Email
                     "Themes" -> icon = Icons.Default.Create
                     "Language" -> icon = Icons.Default.AccountBox
@@ -81,4 +81,9 @@ fun SettingButton(name: String, navController: NavHostController) {
         }
     }
 
+}
+
+fun checkLoggedInState(): Boolean {
+    val auth = FirebaseAuth.getInstance()
+    return auth.currentUser !== null
 }

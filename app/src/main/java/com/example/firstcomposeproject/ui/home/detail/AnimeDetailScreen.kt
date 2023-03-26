@@ -45,7 +45,7 @@ fun AnimeDetailScreen(navController: NavHostController, id: String?) {
     var anime by remember {
         mutableStateOf(AnimeResponse(emptyList()))
     }
-    var isLoading by remember{
+    var isLoading by remember {
         mutableStateOf(true)
     }
     LaunchedEffect(key1 = true) {
@@ -54,10 +54,13 @@ fun AnimeDetailScreen(navController: NavHostController, id: String?) {
         }
         isLoading = false
     }
-    if (isLoading){
-        Box(modifier = Modifier
+    Box(
+        modifier = Modifier
             .fillMaxSize()
-            .background(Color.Gray)){
+            .background(Color.Gray)
+    ) {
+        if (isLoading) {
+
             CircularProgressIndicator(
                 color = Color.Black,
                 strokeWidth = 8.dp,
@@ -66,72 +69,72 @@ fun AnimeDetailScreen(navController: NavHostController, id: String?) {
                     .fillMaxSize()
                     .align(Alignment.Center)
             )
-        }
-    }else{
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Gray)
-        ) {
-            Box(modifier = Modifier.fillMaxWidth()) {
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Box(modifier = Modifier.fillMaxWidth()) {
 
-                AsyncImage(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(300.dp),
-                    contentScale = ContentScale.Crop,
-                    model = if (anime.data.isEmpty()) {
-                        "https://catherineasquithgallery.com/uploads/posts/2021-02/1613327507_26-p-krasivii-anime-fon-sinii-36.jpg"
-                    } else {
-                        anime.data[0].attributes.posterImage.original
-                    },
-                    contentDescription = "Image"
-                )
+                    AsyncImage(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(300.dp),
+                        contentScale = ContentScale.Crop,
+                        model = if (anime.data.isEmpty()) {
+                            "https://catherineasquithgallery.com/uploads/posts/2021-02/1613327507_26-p-krasivii-anime-fon-sinii-36.jpg"
+                        } else {
+                            anime.data[0].attributes.posterImage.original
+                        },
+                        contentDescription = "Image"
+                    )
 
-                Box(
-                    modifier = Modifier
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    Color(0x26000000),
-                                    Color(0x80000000),
-                                    Color(0xB3000000),
+                    Box(
+                        modifier = Modifier
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color(0x26000000),
+                                        Color(0x80000000),
+                                        Color(0xB3000000),
+                                    )
                                 )
                             )
+                            .fillMaxWidth()
+                            .height(60.dp)
+                            .align(Alignment.BottomCenter)
+                    ) {
+                        Text(
+                            text = if (anime.data.isEmpty() || anime.data[0].attributes.titles.en_jp.isEmpty()) {
+                                "No Data"
+                            } else {
+                                anime.data[0].attributes.titles.en_jp
+                            },
+                            style = TextStyle(
+                                color = Color.White,
+                                fontStyle = FontStyle(800),
+                                shadow = Shadow(color = Color.White, blurRadius = 1f),
+
+                                )
                         )
-                        .fillMaxWidth()
-                        .height(60.dp)
-                        .align(Alignment.BottomCenter)
-                ) {
-                    Text(
-                        text = if (anime.data.isEmpty() || anime.data[0].attributes.titles.en_jp.isEmpty()) {
-                            "No Data"
-                        } else {
-                            anime.data[0].attributes.titles.en_jp
-                        },
-                        style = TextStyle(
-                            color = Color.White,
-                            fontStyle = FontStyle(800),
-                            shadow = Shadow(color = Color.White, blurRadius = 1f),
-
-                            )
-                    )
+                    }
                 }
+
+                AndroidView(
+                    modifier = Modifier.fillMaxSize(),
+                    factory = { context ->
+                        WebView(context).apply {
+                            webViewClient = WebViewClient()
+                            var animeName =
+                                anime.data[0].attributes.titles.en_jp.substringBefore(" ")
+                            animeName = animeName.substringBefore(":")
+                            loadUrl("https://jut.su/${animeName}")
+                        }
+                    })
             }
-
-            AndroidView(
-                modifier = Modifier.fillMaxSize(),
-                factory = {
-                context ->
-                WebView(context).apply {
-                    webViewClient = WebViewClient()
-                    var animeName = anime.data[0].attributes.titles.en_jp.substringBefore(" ")
-                    animeName = animeName.substringBefore(":")
-                    loadUrl("https://jut.su/${animeName}")
-                }
-            })
         }
     }
+
 }
 
 suspend fun getAnime(id: String?): AnimeResponse? = coroutineScope {
