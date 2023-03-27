@@ -17,9 +17,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
+import com.example.firstcomposeproject.navigation.Graph
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navController: NavHostController) {
+    val auth = FirebaseAuth.getInstance()
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -44,7 +49,11 @@ fun ProfileScreen() {
             }
             Button(
                 onClick = {
-
+                    auth.signOut()
+                    navController.navigate(Graph.AUTH,
+                        navOptions = NavOptions.Builder()
+                            .setPopUpTo(Graph.SETTING, inclusive = true)
+                            .build())
                 },
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray),
 

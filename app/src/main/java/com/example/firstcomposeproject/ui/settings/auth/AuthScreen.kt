@@ -25,6 +25,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.firstcomposeproject.navigation.Graph
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -53,17 +55,17 @@ fun AuthScreen(navController: NavHostController) {
             .fillMaxSize()
             .background(Color.White),
     ) {
-        Button(
+        IconButton(
             onClick = {
                 navController.popBackStack()
             },
-            modifier = Modifier.size(50.dp).padding(top = 20.dp, start = 20.dp),
-        ) {
+            modifier = Modifier
+                .size(50.dp)
+                .padding(top = 15.dp, start = 10.dp),
+            ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back",
-                modifier = Modifier.size(25.dp),
-                tint = Color.Black
             )
         }
         Column(
@@ -98,17 +100,8 @@ fun AuthScreen(navController: NavHostController) {
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next
                 ),
-                modifier = Modifier
-                    .background(
-                        color = Color.LightGray,
-                        shape = RoundedCornerShape(35.dp, 35.dp, 35.dp, 35.dp)
-                    )
-                    .border(
-                        width = 1.dp,
-                        color = Color.Black,
-                        shape = RoundedCornerShape(35.dp, 35.dp, 35.dp, 35.dp)
-                    ),
                 singleLine = true,
+                shape = RoundedCornerShape(11.dp)
             )
 
             OutlinedTextField(
@@ -122,25 +115,24 @@ fun AuthScreen(navController: NavHostController) {
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Send
                 ),
-                modifier = Modifier.border(
-                    width = 2.dp,
-                    color = Color.Black,
-                    shape = RoundedCornerShape(35.dp, 35.dp, 35.dp, 35.dp)
-                ),
-                singleLine = true
+                shape = RoundedCornerShape(11.dp),
+                singleLine = true,
             )
             Button(
                 onClick = {
                     CoroutineScope(Dispatchers.Default).launch {
                         if (loginField !== "" || passwordField !== "") {
-                            val q = loginField
-                            val t = q
                             auth.signInWithEmailAndPassword(
                                 loginField,
                                 passwordField
                             )
                                 .addOnSuccessListener {
-                                    navController.clearBackStack(Graph.SETTING)
+                                    navController.navigate(
+                                        Graph.PROFILE,
+                                        navOptions = NavOptions.Builder()
+                                            .setPopUpTo(Graph.SETTING, inclusive = true)
+                                            .build()
+                                    )
                                 }
                                 .addOnFailureListener {
 //                                    Toast.makeText(navController.context, "Incorrect login or password", Toast.LENGTH_SHORT).show()

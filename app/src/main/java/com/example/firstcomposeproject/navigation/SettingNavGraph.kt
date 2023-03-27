@@ -14,45 +14,30 @@ import com.example.firstcomposeproject.ui.settings.auth.RegistrationScreen
 import com.example.firstcomposeproject.ui.settings.profile.ProfileScreen
 
 @Composable
-fun NavGraph(
+fun SettingNavGraph(
     navController: NavHostController
 ) {
-    NavHost(navController = navController, startDestination = Graph.HOME){
-        composable(Graph.HOME){
+    NavHost(navController = navController, startDestination = Graph.SETTING) {
+        composable(Graph.HOME) {
             HomeScreen(navController)
         }
-        composable(Graph.SEARCH){
+        composable(Graph.SEARCH) {
             SearchScreen(navController)
         }
-        composable(Graph.FAVORITE){
+        composable(Graph.FAVORITE) {
             FavoriteScreen(navController)
         }
-        composable(Graph.SETTING){
+        composable(Graph.SETTING) {
             SettingScreen(navController)
         }
-        composable("detail/{ID}"){
-            AnimeDetailScreen(navController , it.arguments?.getString("ID"))
-        }
-        composable(Graph.PROFILE){
+        composable(Graph.PROFILE) {
             ProfileScreen(navController)
         }
-        composable(Graph.AUTH){
+        composable(Graph.AUTH) {
             AuthScreen(navController)
         }
-        composable(Graph.REGISTRATION){
+        composable(Graph.REGISTRATION) {
             RegistrationScreen(navController)
         }
     }
-}
-
-object Graph {
-    const val ROOT = "root_graph"
-    const val HOME = "home"
-    const val SEARCH = "search"
-    const val FAVORITE = "favorite"
-    const val SETTING = "setting"
-    const val PROFILE = "profile"
-    const val AUTH = "auth"
-    const val REGISTRATION = "registration"
-    const val DETAIL = "detail"
 }

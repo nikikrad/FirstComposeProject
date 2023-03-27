@@ -1,43 +1,26 @@
 package com.example.firstcomposeproject.ui.home.detail
 
-import android.annotation.SuppressLint
-import android.graphics.Paint.Style
-import android.util.Log
-import android.webkit.WebView
-import android.webkit.WebViewClient
-import android.widget.ProgressBar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.style.LineHeightStyle.Alignment.Companion.Bottom
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.AsyncImage
 import com.example.firstcomposeproject.domain.ApiService
 import com.example.firstcomposeproject.domain.response.AnimeResponse
 import com.example.firstcomposeproject.domain.retrofit.RetrofitInstance
-import com.example.firstcomposeproject.ui.theme.HalfDarkColor
-import com.example.firstcomposeproject.ui.theme.Purple200
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
-import kotlin.random.Random
 
 @Composable
 fun AnimeDetailScreen(navController: NavHostController, id: String?) {
@@ -120,21 +103,37 @@ fun AnimeDetailScreen(navController: NavHostController, id: String?) {
                     }
                 }
 
-                AndroidView(
-                    modifier = Modifier.fillMaxSize(),
-                    factory = { context ->
-                        WebView(context).apply {
-                            webViewClient = WebViewClient()
-                            var animeName =
-                                anime.data[0].attributes.titles.en_jp.substringBefore(" ")
-                            animeName = animeName.substringBefore(":")
-                            loadUrl("https://jut.su/${animeName}")
-                        }
-                    })
+                Text(
+                    text = "Description", style = TextStyle(
+                        color = Color.Black
+                    ),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(16.dp)
+                )
+                Text(
+                    text = anime.data[0].attributes.description, style = TextStyle(
+                        color = Color.Black,
+                    ),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(16.dp)
+                )
+                Row {
+                    Button(onClick = {
+
+                    }) {
+                        Text(text = "Add to favorite")
+                    }
+                    Button(onClick = {
+
+                    }) {
+                        Text(text = "Remove from favorite")
+                    }
+                }
             }
         }
     }
-
 }
 
 suspend fun getAnime(id: String?): AnimeResponse? = coroutineScope {

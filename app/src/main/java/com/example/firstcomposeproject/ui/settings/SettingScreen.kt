@@ -15,6 +15,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.firstcomposeproject.navigation.Graph
+import com.example.firstcomposeproject.navigation.SettingNavGraph
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -25,7 +26,6 @@ fun SettingScreen(navController: NavHostController) {
             .background(Color.Gray)
             .padding(start = 2.dp, end = 2.dp),
         verticalArrangement = Arrangement.spacedBy(5.dp),
-
         ) {
         SettingButton("Profile", navController)
         SettingButton("Themes", navController)
@@ -64,9 +64,9 @@ fun SettingButton(name: String, navController: NavHostController) {
             ) {
                 var icon: ImageVector = Icons.Default.Done
                 when (name) {
-                    "Authentication" -> icon = Icons.Default.Email
+                    "Profile" -> icon = Icons.Default.AccountBox
                     "Themes" -> icon = Icons.Default.Create
-                    "Language" -> icon = Icons.Default.AccountBox
+                    "Language" -> icon = Icons.Default.LocationOn
                 }
                 Icon(
                     imageVector = icon,
