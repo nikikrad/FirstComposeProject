@@ -6,20 +6,15 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 
 @Composable
 fun ShimmerListItem(
@@ -32,7 +27,7 @@ fun ShimmerListItem(
 
         Row( modifier = modifier
             .size(300.dp)
-            .shimmerEffect(),) {
+            .shimmerListItemEffect(),) {
             Box(
                 modifier = Modifier.fillMaxSize()
             )
@@ -42,7 +37,7 @@ fun ShimmerListItem(
     }
 }
 
-fun Modifier.shimmerEffect(): Modifier = composed {
+fun Modifier.shimmerListItemEffect(): Modifier = composed {
     var size by remember {
         mutableStateOf(IntSize.Zero)
     }
@@ -57,9 +52,9 @@ fun Modifier.shimmerEffect(): Modifier = composed {
     background(
         brush = Brush.linearGradient(
             colors = listOf(
-                Color(0xFF000000),
-                Color(0xFF838282),
-                Color(0xFF000000),
+                Color.LightGray,
+                Color.DarkGray,
+                Color.LightGray,
             ),
             start = Offset(startOffsetX, 0f),
             end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())

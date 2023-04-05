@@ -1,5 +1,6 @@
 package com.example.firstcomposeproject.ui.settings.auth
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
+import com.example.firstcomposeproject.domain.response.firebase.UserResponse
 import com.example.firstcomposeproject.navigation.Graph
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
@@ -41,6 +43,7 @@ fun RegistrationScreen(navController: NavHostController) {
     var repeatPasswordField by remember {
         mutableStateOf("")
     }
+    var usersList: MutableList<UserResponse> = emptyList<UserResponse>().toMutableList()
 
     Box(
         modifier = Modifier
@@ -136,6 +139,28 @@ fun RegistrationScreen(navController: NavHostController) {
                                     passwordField
                                 )
                                     .addOnSuccessListener {
+                                        database.child("users").get()
+                                            .addOnSuccessListener {
+                                                it.children.forEach { data ->
+                                                    usersList.add(
+                                                        UserResponse(
+                                                            data.child("userId").value.toString(),
+                                                            data.child("email").value.toString()
+                                                        )
+                                                    )
+                                                }
+                                                database.child("users")
+                                                    .child((usersList.last().userId.toInt() + 1).toString())
+                                                    .setValue(
+                                                        UserResponse(
+                                                            (usersList.last().userId.toInt() + 1).toString(),
+                                                            auth.currentUser?.email!!
+                                                        )
+                                                    )
+                                            }.addOnFailureListener {
+                                                Log.e("TAG", "RegistrationScreen: ${it.localizedMessage}", )
+                                            }
+
                                         navController.navigate(
                                             Graph.PROFILE,
                                             navOptions = NavOptions.Builder()

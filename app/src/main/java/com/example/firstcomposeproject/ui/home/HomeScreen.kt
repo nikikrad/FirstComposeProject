@@ -1,6 +1,5 @@
 package com.example.firstcomposeproject.ui.home
 
-import android.os.Bundle
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,21 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.*
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.firstcomposeproject.domain.ApiService
 import com.example.firstcomposeproject.domain.response.AnimeResponse
 import com.example.firstcomposeproject.domain.retrofit.RetrofitInstance
-import com.example.firstcomposeproject.navigation.Graph
-import com.example.firstcomposeproject.navigation.NavGraph
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import okhttp3.internal.wait
 import kotlin.random.Random
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
@@ -75,7 +68,7 @@ fun HomeScreen(navController: NavHostController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-                    .shimmerEffect()
+                    .shimmerListItemEffect()
             )
         }
     }
