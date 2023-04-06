@@ -19,25 +19,20 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.firstcomposeproject.domain.ApiService
 import com.example.firstcomposeproject.domain.response.AnimeResponse
-import com.example.firstcomposeproject.domain.retrofit.RetrofitInstance
+import com.example.firstcomposeproject.domain.response.firebase.AnimeRequest
 import com.example.firstcomposeproject.ui.home.shimmerListItemEffect
 import com.example.firstcomposeproject.ui.theme.FirstComposeProjectTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.buffer
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -51,16 +46,7 @@ fun AnimeDetailScreen(navController: NavHostController, id: String?) {
         }
         val animeResponse by viewModel.animeResponse.collectAsStateWithLifecycle()
         val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
-
-//    var anime by remember {
-//        mutableStateOf(AnimeResponse(emptyList()))
-//    }
-//        var isLoading by remember {
-//            mutableStateOf(true)
-//        }
-//    var firebaseDataIsLoading by remember {
-//        mutableStateOf(true)
-//    }
+        val animeStatus by viewModel.animeStatus.collectAsStateWithLifecycle()
 
         Box(
             modifier = Modifier
@@ -147,7 +133,7 @@ fun AnimeDetailScreen(navController: NavHostController, id: String?) {
                     ShimmerButtonGroup(
                         isLoading = isLoading,
                         contentAfterLoading = {
-                            CustomRadioGroup(animeResponse)
+                            CustomRadioGroup(animeResponse, viewModel)
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -160,8 +146,9 @@ fun AnimeDetailScreen(navController: NavHostController, id: String?) {
     }
 }
 
+@SuppressLint("StateFlowValueCalledInComposition")
 @Composable
-fun CustomRadioGroup(anime: AnimeResponse) {
+fun CustomRadioGroup(anime: AnimeResponse, viewModel: AnimeDetailViewModel) {
     val options = listOf(
         "Haven't watched",
         "Watched",
@@ -169,12 +156,6 @@ fun CustomRadioGroup(anime: AnimeResponse) {
         "Threw",
         "Will watch",
     )
-    var selectedOption by remember {
-        mutableStateOf("")
-    }
-    val onSelectionChange = { text: String ->
-        selectedOption = text
-    }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -191,7 +172,7 @@ fun CustomRadioGroup(anime: AnimeResponse) {
                 Text(
                     text = text,
                     style = TextStyle(
-                        color = if (text == selectedOption) {
+                        color = if (text == viewModel.animeStatus.value) {
                             Color.White
                         } else {
                             Color.Black
@@ -208,10 +189,39 @@ fun CustomRadioGroup(anime: AnimeResponse) {
                         .clickable {
                             val auth = FirebaseAuth.getInstance()
                             val database = Firebase.database.reference
-                            onSelectionChange(text)
+                            if (text == "Haven't watched") {
+                                database
+                                    .child(
+                                        auth.currentUser?.email
+                                            .toString()
+                                            .substringBefore("@")
+                                    )
+                                    .get()
+                                    .addOnSuccessListener {
+                                        it.child(anime.data[0].id.toString()).ref.removeValue()
+                                    }
+                            } else {
+                                database
+                                    .child(
+                                        auth.currentUser?.email
+                                            .toString()
+                                            .substringBefore("@")
+                                    )
+                                    .child(anime.data[0].id.toString())
+                                    .setValue(
+                                        AnimeRequest(
+                                            anime.data[0].id.toString(),
+                                            anime.data[0].attributes.description,
+                                            anime.data[0].attributes.titles.en_jp,
+                                            anime.data[0].attributes.posterImage.original,
+                                            text
+                                        )
+                                    )
+                            }
+                            viewModel.onSelectionChange(text)
                         }
                         .background(
-                            if (text == selectedOption) {
+                            if (text == viewModel.animeStatus.value) {
                                 Color.Black
                             } else {
                                 Color.LightGray
@@ -229,7 +239,6 @@ fun CustomRadioGroup(anime: AnimeResponse) {
 
 @Composable
 fun ShimmerButtonGroup(
-
     isLoading: Boolean,
     contentAfterLoading: @Composable () -> Unit,
     modifier: Modifier = Modifier

@@ -24,6 +24,8 @@ class AnimeDetailViewModel(
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
+    private val _animeStatus = MutableStateFlow("Haven't watched")
+    var animeStatus = _animeStatus.asStateFlow()
 
     fun getFirebaseAnime(id: String?) {
         val auth = FirebaseAuth.getInstance()
@@ -32,24 +34,39 @@ class AnimeDetailViewModel(
             database.child(auth.currentUser?.email.toString().substringBefore("@")).get()
                 .addOnSuccessListener {
                     var count = 0
-                    if (it.children.toList().isEmpty()){
+
                         it.children.forEach { data ->
-                            if (it.children.toList().size == count++) {
+                            if (it.children.toList().size !== count++) {
                                 if (data.key.toString() == id) {
-                                    data.child("")
+                                    when(data.child("status").value){
+                                        "Watched" -> {
+                                            _animeStatus.value = "Watched"
+                                            _isLoading.value = false
+                                        }
+                                        "Watching" -> {
+                                            _animeStatus.value = "Watching"
+                                            _isLoading.value = false
+                                        }
+                                        "Threw" ->{
+                                            _animeStatus.value = "Threw"
+                                            _isLoading.value = false
+                                        }
+                                        "Will watch" -> {
+                                            _animeStatus.value = "Will watch"
+                                            _isLoading.value = false
+                                        }
+                                    }
+                                }else{
+                                    _animeStatus.value = "Haven't watched"
                                 }
                             } else {
                                 _isLoading.value = false
                             }
                         }
-                    }else{
-                        _isLoading.value = false
-                    }
                 }
                 .addOnFailureListener {
-                    _isLoading.value = false
+                    _isLoading.value = true
                 }
-            _isLoading.value = false
         }
         else{
 
@@ -68,6 +85,8 @@ class AnimeDetailViewModel(
 //            savedStateHandle["animeResponse"] = anime
         }
     }
-
+    fun onSelectionChange(text: String){
+        _animeStatus.value = text
+    }
 
 }
