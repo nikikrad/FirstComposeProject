@@ -34,41 +34,41 @@ class AnimeDetailViewModel(
             database.child(auth.currentUser?.email.toString().substringBefore("@")).get()
                 .addOnSuccessListener {
                     var count = 0
-
-                        it.children.forEach { data ->
-                            if (it.children.toList().size !== count++) {
-                                if (data.key.toString() == id) {
-                                    when(data.child("status").value){
-                                        "Watched" -> {
-                                            _animeStatus.value = "Watched"
-                                            _isLoading.value = false
-                                        }
-                                        "Watching" -> {
-                                            _animeStatus.value = "Watching"
-                                            _isLoading.value = false
-                                        }
-                                        "Threw" ->{
-                                            _animeStatus.value = "Threw"
-                                            _isLoading.value = false
-                                        }
-                                        "Will watch" -> {
-                                            _animeStatus.value = "Will watch"
-                                            _isLoading.value = false
-                                        }
+                    it.children.forEach { data ->
+                        if (it.children.toList().size !== count++) {
+                            if (data.key.toString() == id) {
+                                when (data.child("status").value) {
+                                    "Watched" -> {
+                                        _animeStatus.value = "Watched"
+                                        _isLoading.value = false
                                     }
-                                }else{
-                                    _animeStatus.value = "Haven't watched"
+                                    "Watching" -> {
+                                        _animeStatus.value = "Watching"
+                                        _isLoading.value = false
+                                    }
+                                    "Threw" -> {
+                                        _animeStatus.value = "Threw"
+                                        _isLoading.value = false
+                                    }
+                                    "Will watch" -> {
+                                        _animeStatus.value = "Will watch"
+                                        _isLoading.value = false
+                                    }
+
                                 }
                             } else {
+                                _animeStatus.value = "Haven't watched"
                                 _isLoading.value = false
                             }
+                        } else {
+                            _isLoading.value = false
                         }
+                    }
                 }
                 .addOnFailureListener {
                     _isLoading.value = true
                 }
-        }
-        else{
+        } else {
 
         }
     }
@@ -85,7 +85,8 @@ class AnimeDetailViewModel(
 //            savedStateHandle["animeResponse"] = anime
         }
     }
-    fun onSelectionChange(text: String){
+
+    fun onSelectionChange(text: String) {
         _animeStatus.value = text
     }
 
