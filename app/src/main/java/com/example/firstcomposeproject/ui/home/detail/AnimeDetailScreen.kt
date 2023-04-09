@@ -36,6 +36,7 @@ import com.google.android.gms.common.wrappers.Wrappers.packageManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.*
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
@@ -51,6 +52,10 @@ fun AnimeDetailScreen(navController: NavHostController, id: String?) {
         val animeResponse by viewModel.animeResponse.collectAsStateWithLifecycle()
         val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
         val animeStatus by viewModel.animeStatus.collectAsStateWithLifecycle()
+//        val image = AsyncImage(
+//            model = animeResponse.data[0].attributes.posterImage.original,
+//            contentDescription = "Image"
+//        )
 
         Box(
             modifier = Modifier
@@ -146,19 +151,36 @@ fun AnimeDetailScreen(navController: NavHostController, id: String?) {
                     )
                     Button(
                         onClick = {
-                            val intent = Intent()
-                            intent.action = Intent.ACTION_SEND
-                            intent.putExtra(
-                                Intent.EXTRA_TEXT,
-                                if (animeResponse.data[0].attributes.youtubeVideo == null || animeResponse.data[0].attributes.youtubeVideo == ""){
-                                    "${animeResponse.data[0].attributes.titles.en_jp}\n\n${animeResponse.data[0].attributes.posterImage.original}"
-                                }else{
-                                    "${animeResponse.data[0].attributes.titles.en_jp}\n\nhttps://www.youtube.com/watch?v=${animeResponse.data[0].attributes.youtubeVideo}"
+//                            val intent = Intent()
+//                            intent.action = Intent.ACTION_SEND
+//                            intent.putExtra(
+//                                Intent.EXTRA_TEXT,
+//                                if (animeResponse.data[0].attributes.youtubeVideo == null || animeResponse.data[0].attributes.youtubeVideo == "") {
+//                                    "${animeResponse.data[0].attributes.titles.en_jp}\n\n${animeResponse.data[0].attributes.posterImage.original}"
+//                                } else {
+//                                    "${animeResponse.data[0].attributes.titles.en_jp}\n\nhttps://www.youtube.com/watch?v=${animeResponse.data[0].attributes.youtubeVideo}"
+//                                }
+//                            )
+//                            intent.type = "text/plain"
+//                            context.startActivity(intent)
+                            CoroutineScope(Dispatchers.IO).launch {
+                                val shareIntent = Intent(Intent.ACTION_SEND)
+                                shareIntent.type = "image/*"
+                                val image = viewModel.bitmapImage(
+                                    context,
+                                    animeResponse.data[0].attributes.posterImage.original
+                                )
+                                withContext(Dispatchers.Main) {
+                                    shareIntent.putExtra(Intent.EXTRA_STREAM, image)
+                                    shareIntent.putExtra(Intent.EXTRA_TEXT, "${animeResponse.data[0].attributes.titles.en_jp}\n\nhttps://www.youtube.com/watch?v=${animeResponse.data[0].attributes.youtubeVideo}")
+                                    context.startActivity(
+                                        Intent.createChooser(
+                                            shareIntent,
+                                            "Share image"
+                                        )
+                                    )
                                 }
-                            )
-                            intent.type = "text/plain"
-                            if (intent.resolveActivity(context.packageManager) !== null) {
-                                context.startActivity(intent)
+
                             }
                         },
                         shape = RoundedCornerShape(3.dp),
@@ -166,7 +188,12 @@ fun AnimeDetailScreen(navController: NavHostController, id: String?) {
                             .background(Color.Transparent)
                             .align(Alignment.CenterHorizontally),
                     ) {
-                        Icon(imageVector = Icons.Default.Share, contentDescription = "icon", modifier = Modifier.size(24.dp), tint = Color.Black)
+                        Icon(
+                            imageVector = Icons.Default.Share,
+                            contentDescription = "icon",
+                            modifier = Modifier.size(24.dp),
+                            tint = Color.Black
+                        )
                         Text(text = "Share", color = Color.Black)
                     }
                 }
@@ -174,6 +201,7 @@ fun AnimeDetailScreen(navController: NavHostController, id: String?) {
         }
     }
 }
+
 
 @SuppressLint("StateFlowValueCalledInComposition")
 @Composable
