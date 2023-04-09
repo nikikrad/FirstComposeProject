@@ -24,7 +24,7 @@ class AnimeDetailViewModel(
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
-    private val _animeStatus = MutableStateFlow("Haven't watched")
+    private val _animeStatus = MutableStateFlow("")//Haven't watched
     var animeStatus = _animeStatus.asStateFlow()
 
     fun getFirebaseAnime(id: String?) {
@@ -41,24 +41,26 @@ class AnimeDetailViewModel(
                                     "Watched" -> {
                                         _animeStatus.value = "Watched"
                                         _isLoading.value = false
+                                        return@addOnSuccessListener
                                     }
                                     "Watching" -> {
                                         _animeStatus.value = "Watching"
                                         _isLoading.value = false
+                                        return@addOnSuccessListener
                                     }
                                     "Threw" -> {
                                         _animeStatus.value = "Threw"
                                         _isLoading.value = false
+                                        return@addOnSuccessListener
                                     }
                                     "Will watch" -> {
                                         _animeStatus.value = "Will watch"
                                         _isLoading.value = false
+                                        return@addOnSuccessListener
                                     }
-
                                 }
                             } else {
                                 _animeStatus.value = "Haven't watched"
-                                _isLoading.value = false
                             }
                         } else {
                             _isLoading.value = false

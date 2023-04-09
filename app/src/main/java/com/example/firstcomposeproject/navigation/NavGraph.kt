@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.firstcomposeproject.ui.favorite.FavoriteScreen
+import com.example.firstcomposeproject.ui.favorite.tab_screens.ThrewScreen
 import com.example.firstcomposeproject.ui.home.HomeScreen
 import com.example.firstcomposeproject.ui.home.detail.AnimeDetailScreen
 import com.example.firstcomposeproject.ui.search.SearchScreen
@@ -55,4 +56,5 @@ object Graph {
     const val AUTH = "auth"
     const val REGISTRATION = "registration"
     const val DETAIL = "detail"
+    const val THREW = "threw"
 }

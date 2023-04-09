@@ -1,7 +1,6 @@
 package com.example.firstcomposeproject.ui.favorite
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
 import com.example.firstcomposeproject.R
 import com.example.firstcomposeproject.ui.favorite.tab_screens.ThrewScreen
 import com.example.firstcomposeproject.ui.favorite.tab_screens.WatchedScreen
